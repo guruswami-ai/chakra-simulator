@@ -42,3 +42,10 @@ dist.bak/
 test-results/
 playwright-report/
 e2e/**/*.png
+
+# Secrets: never commit these
+.env
+.env.*
+!.env.example
+*.pem
+*.key
