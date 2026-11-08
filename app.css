@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/* ── Layer Split Animations ────────────────────── */
+
+/* PP: each STAGE (node) pulses in sequence (top → bottom).
+   All layers within a stage fire together (same node), then the activation
+   passes to the next stage. Bright window must be < 1/maxStages (20% for PP5). */
+@keyframes ppScan {
+  0%, 100% { filter: brightness(1); }
+  7% { filter: brightness(1.6); }
+  16% { filter: brightness(1); }
+}
+
+/* TP: entire ROW brightens together (all shards compute simultaneously),
+   then the wave moves down to the next layer. Delay is per-row, not per-shard.
+   This matches real TP: all nodes process their shard of layer N in parallel,
+   all-reduce sync, then all move to layer N+1. */
+@keyframes tpRowScan {
+  0%, 100% { filter: brightness(1); }
+  12% { filter: brightness(1.4); }
+  24% { filter: brightness(1); }
+}
+
+/* ── Responsive Drawer ──────────────────────────── */
+.drawer-transition {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), height 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, height;
+}
+.drawer-backdrop {
+  transition: opacity 300ms ease;
+}
+
+/* ── Mobile Safe Area ──────────────────────────── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@layer components {
+  /* ── Codex Typography Scale ─────────────────── */
+  .codex-root     { font-family: 'Instrument Sans', 'Space Grotesk', sans-serif; }
+  .codex-display  { font-family: 'Orbitron', sans-serif; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; }
+  .codex-heading  { font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  .codex-body     { font-family: 'Instrument Sans', sans-serif; font-size: 13px; line-height: 1.7; }
+  .codex-tech     { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .codex-label    { font-family: 'Space Grotesk', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; }
+  .codex-caption  { font-family: 'Instrument Sans', sans-serif; font-size: 11px; color: rgba(255,255,255,0.35); }
+}

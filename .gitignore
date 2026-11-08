@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Large media assets — deployed via Cloudflare Pages, not stored in git
+# (total ~690MB, exceeds GitHub recommended repo size)
+public/guruswami/music/**/*.m4a
+public/guruswami/music/**/*.mp3
+public/guruswami/music/**/*.md
+public/guruswami/voice/**/*.m4a
+public/guruswami/voice/**/*.mp3
+public/guruswami/voice/**/*.wav
+public/guruswami/video/
+public/guruswami/audio/
+public/recordings/
+
+# Backup builds
+dist.bak/
+
+# Playwright
+test-results/
+playwright-report/
+e2e/**/*.png

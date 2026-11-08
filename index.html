@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chakra Cluster Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --panel-bg: rgba(0, 0, 0, 0.7);
+        --panel-border: rgba(255, 255, 255, 0.08);
+        --glow-cyan: rgba(6, 182, 212, 0.3);
+      }
+
+      body {
+        margin: 0;
+        background-color: #000000;
+        color: #f0f0f0;
+        font-family: 'Space Grotesk', sans-serif;
+        overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.5;
+      }
+      
+      .font-mono { font-family: 'JetBrains Mono', monospace; }
+      .font-orbitron { font-family: 'Orbitron', sans-serif; }
+      
+      /* Global HUD Grid */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* Refined Chakra Panel */
+      .chakra-panel {
+        position: relative;
+        background: var(--panel-bg);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        border: 1px solid var(--panel-border);
+        box-shadow: 
+          0 20px 50px rgba(0, 0, 0, 0.5),
+          inset 0 0 20px rgba(255, 255, 255, 0.02);
+        overflow: hidden;
+      }
+
+      /* Scanline Effect */
+      .chakra-panel::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 1px,
+          rgba(255, 255, 255, 0.01) 1px,
+          rgba(255, 255, 255, 0.01) 2px
+        );
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      /* Inner Glow Border */
+      .chakra-panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        pointer-events: none;
+        z-index: 3;
+      }
+
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+      }
+      .animate-hud-float { animation: float 6s ease-in-out infinite; }
+
+      /* Chakra theme state containers */
+      .chakra-theme-reference { --theme-accent: rgba(255, 255, 255, 0.1); }
+      .chakra-theme-optimal { --theme-accent: rgba(6, 182, 212, 0.08); }
+      .chakra-theme-dissonance { --theme-accent: rgba(239, 68, 68, 0.06); }
+
+      /* Node visualization animations */
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes pulse-ring {
+        0%, 100% { stroke-opacity: 0.8; stroke-width: 3; }
+        50% { stroke-opacity: 1; stroke-width: 4; }
+      }
+
+      @keyframes glow-pulse {
+        0%, 100% { filter: drop-shadow(0 0 8px currentColor); }
+        50% { filter: drop-shadow(0 0 16px currentColor); }
+      }
+
+      /* Cluster Metrics Ring animations */
+      @keyframes pulse-fast {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      
+      @keyframes pulse-slow {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.85; }
+      }
+      
+      .animate-pulse-fast {
+        animation: pulse-fast 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      
+      .animate-pulse-slow {
+        animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      /* Q2 quantization glitch — chromatic aberration on hover */
+      @keyframes glitch-anim {
+        0% { transform: translate(0); }
+        20% { transform: translate(-2px, 2px); }
+        40% { transform: translate(-2px, -2px); }
+        60% { transform: translate(2px, 2px); }
+        80% { transform: translate(2px, -2px); }
+        100% { transform: translate(0); }
+      }
+
+      @keyframes jitter {
+        0%, 100% { transform: translate(0, 0); }
+        10% { transform: translate(-1px, 0); }
+        20% { transform: translate(1px, 0); }
+        30% { transform: translate(0, -1px); }
+        40% { transform: translate(0, 1px); }
+        50% { transform: translate(-1px, 1px); }
+        60% { transform: translate(1px, -1px); }
+        70% { transform: translate(-1px, -1px); }
+        80% { transform: translate(1px, 1px); }
+        90% { transform: translate(0, 0); }
+      }
+
+      .quant-glitch { position: relative; }
+      .quant-glitch:hover { animation: jitter 0.15s infinite; }
+
+      .quant-glitch:hover::before {
+        content: attr(data-text);
+        position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        text-shadow: 2px 0 #ff00c1;
+        background: transparent; overflow: hidden;
+        animation: glitch-anim 2s infinite linear alternate-reverse;
+        pointer-events: none; z-index: 1;
+      }
+
+      .quant-glitch:hover::after {
+        content: attr(data-text);
+        position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        text-shadow: -2px 0 #00fff9;
+        background: transparent; overflow: hidden;
+        animation: glitch-anim 3s infinite linear alternate-reverse;
+        pointer-events: none; z-index: 1;
+      }
+
+      /* ── Codex Drawer prose styles ─────────────────────────── */
+      .prose-codex {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .prose-codex h1, .prose-codex h2, .prose-codex h3, .prose-codex h4 {
+        font-family: 'Space Grotesk', sans-serif;
+        color: #fff;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 2em;
+        margin-bottom: 0.75em;
+      }
+      .prose-codex h1 { font-size: 1.4em; }
+      .prose-codex h2 { font-size: 1.15em; color: rgba(192, 132, 252, 0.9); }
+      .prose-codex h3 { font-size: 1em; color: rgba(255, 255, 255, 0.7); }
+      .prose-codex h4 { font-size: 0.9em; color: rgba(255, 255, 255, 0.5); }
+      .prose-codex p { margin-bottom: 1em; }
+      .prose-codex strong { color: rgba(255, 255, 255, 0.85); font-weight: 700; }
+      .prose-codex em { color: rgba(192, 132, 252, 0.7); }
+      .prose-codex a {
+        color: rgba(192, 132, 252, 0.8);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .prose-codex a:hover { color: rgba(192, 132, 252, 1); }
+      .prose-codex code {
+        background: rgba(192, 132, 252, 0.1);
+        color: rgba(192, 132, 252, 0.9);
+        padding: 0.15em 0.4em;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+      .prose-codex pre {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(192, 132, 252, 0.15);
+        border-radius: 12px;
+        padding: 1em 1.25em;
+        overflow-x: auto;
+        margin: 1em 0;
+      }
+      .prose-codex pre code {
+        background: none;
+        padding: 0;
+        color: rgba(6, 182, 212, 0.8);
+        font-size: 0.85em;
+      }
+      .prose-codex ul, .prose-codex ol {
+        padding-left: 1.5em;
+        margin-bottom: 1em;
+      }
+      .prose-codex li { margin-bottom: 0.4em; }
+      .prose-codex li::marker { color: rgba(255, 255, 255, 0.25); }
+      .prose-codex table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1em 0;
+        font-size: 0.9em;
+      }
+      .prose-codex th {
+        text-align: left;
+        padding: 0.6em 0.8em;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85em;
+        letter-spacing: 0.1em;
+      }
+      .prose-codex td {
+        padding: 0.5em 0.8em;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .prose-codex tr:hover td { background: rgba(255, 255, 255, 0.02); }
+      .prose-codex blockquote {
+        border-left: 3px solid rgba(192, 132, 252, 0.3);
+        padding-left: 1em;
+        margin: 1em 0;
+        color: rgba(255, 255, 255, 0.45);
+        font-style: italic;
+      }
+      .prose-codex hr {
+        border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        margin: 2em 0;
+      }
+      .prose-codex img { max-width: 100%; border-radius: 12px; }
+    </style>
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "categories": {
+    "appear": {
+      "loop": false,
+      "files": ["gs_appear_1.mp4", "gs_appear_2.mp4", "gs_appear_3.mp4", "gs_appear_4.mp4", "gs_appear_5.mp4", "gs_appear_6.mp4"]
+    },
+    "idle": {
+      "loop": true,
+      "files": ["gs_idle_1.mp4", "gs_idle_2.mp4"]
+    },
+    "talk": {
+      "loop": true,
+      "files": ["gs_talk_1.mp4", "gs_talk_2.mp4", "gs_talk_3.mp4", "gs_talk_4.mp4", "gs_talk_5.mp4", "gs_talk_6.mp4", "gs_talk_7.mp4", "gs_talk_8.mp4", "gs_talk_9.mp4", "gs_talk_10.mp4"]
+    },
+    "think": {
+      "loop": true,
+      "files": ["gs_think_1.mp4", "gs_think_2.mp4", "gs_think_5.mp4", "guru_think_3.mp4", "guru_think_4.mp4"]
+    },
+    "wave": {
+      "loop": true,
+      "files": ["gs_wave_1.mp4", "gs_wave_2.mp4", "gs_wave_3.mp4", "gs_wave_4.mp4"]
+    },
+    "listen": {
+      "loop": true,
+      "files": ["gs_listen_1.mp4"]
+    },
+    "yes": {
+      "loop": true,
+      "files": ["gs_yes_1.mp4", "gs_yes_2.mp4"]
+    },
+    "no": {
+      "loop": true,
+      "files": ["gs_no_1.mp4", "gs_no_2.mp4", "gs_no_3.mp4"]
+    },
+    "disappear": {
+      "loop": false,
+      "files": ["gs_disappear_1.mp4", "gs_disappear_2.mp4", "gs_disappear_3.mp4", "gs_disappear_4.mp4", "gs_disappear_5.mp4"]
+    }
+  }
+}
